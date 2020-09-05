@@ -81,10 +81,15 @@ def generate_domains(puzzles):
     domain values (where the first set is the domain for variable 0, the second for
     variable 1 ect.)
     """
+    return list(map(generate_domains_single, puzzles))
 
-    # ********** YOU IMPLEMENT THIS **********
 
-    return []
+def generate_domains_single(puzzle):
+    """
+    Return a domain for a single puzzle.
+    """
+    # TODO: replace {1,...,9} with a variable if never modified outside of function
+    return [{x} if x else {1, 2, 3, 4, 5, 6, 7, 8, 9} for x in puzzle]
 
 
 def generate_constraints():
@@ -95,11 +100,32 @@ def generate_constraints():
     value 1 the top-2nd-left-most, ..., and the value 80 the bottom-right-most cell. As
     non-equal constraints are symmetrical there is no need to generate the symmetri,
     e.g., generate (0,1) but not (1,0).
+
+    0  1  2  3  4  5  6  7  8
+    9  10 11 12 13 14 15 16 17
+    18 19 20 21 22 23 24 25 26
+    27 28 29 30 31 32 33 34 35
+    36 37 38 39 40 41 42 43 44
+    45 46 47 48 49 50 51 52 53
+    54 55 56 57 58 59 60 61 62
+    63 64 65 66 67 68 69 70 71
+    72 73 74 75 76 77 78 79 80
     """
+    lis = []
+    collect_rows(lis)
+    collect_columns(lis)
+    collect_boxes(lis)
 
-    # ********** YOU IMPLEMENT THIS **********
+def collect_rows(lis):
+    for x in range(81):
+        for y in range(x + 1, 9 + (x//9)*9):
+            lis.append((x, y))
 
-    return []
+def collect_columns(lis):
+    pass
+
+def collect_boxes(lis):
+    pass
 
 
 def main():
@@ -124,6 +150,9 @@ def main():
     print('Processing puzzles from file', input_puzzle_file)
     puzzles = read_puzzles(input_puzzle_file)
     print('Read in', len(puzzles), 'Sudoku puzzle instances.')
+
+    print(puzzles)
+    return
 
     print('Generating and writing domains to file', output_domains_file)
     domains = generate_domains(puzzles)
