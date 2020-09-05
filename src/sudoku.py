@@ -117,6 +117,7 @@ def generate_constraints():
     collect_boxes(lis)
     return lis
 
+
 def collect_rows(lis):
     """Collect all elements along with any element to its right.
     """
@@ -124,7 +125,10 @@ def collect_rows(lis):
         for y in range(x + 1, 9 + (x//9)*9):
             lis.append((x, y))
 
+
 def collect_columns(lis):
+    """Collect all elements along with any element below it.
+    """
     for x in range(72):
         for y in range(x + 9, 81, 9):
             lis.append((x, y))
@@ -132,7 +136,8 @@ def collect_columns(lis):
 
 def collect_boxes(lis):
     """Collect all elements along with any elements sharing a box to its right
-    or below (or both)."""
+    or below (or both).
+    """
     for x in range(81):
         if (x // 9) % 3 == 2:
             continue
@@ -161,7 +166,6 @@ def collect_boxes(lis):
             else:
                 # (2,1)
                 lis.append((x, x + 8))
-
 
 
 def main():
