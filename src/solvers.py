@@ -6,14 +6,16 @@
 
 from enum import Enum
 
+
 class SolverType(Enum):
+    """Solver types enum"""
     GTBT = 1        # Generate-and-test Backtracking
     BT = 2          # Cronological Backtracking
     BJ = 3          # Backjumping
     CBJ = 4         # Conflict-Directed Backjumping
 
 
-def make_arc_consistent( cn ):
+def make_arc_consistent(cn):
     """
     Makes the cn constraint network arc-consistent (use the AC-3 algorithm).
     (there are no unary-constraints so you can omit making it first node-consistent).
@@ -24,21 +26,21 @@ def make_arc_consistent( cn ):
     return
 
 
-def solve( st, cn ):
+def solve(st, cn):
     """
     Use the specified backtracking algorithm (st) to solve the CSP problem (cn).
-    Returns a tuple (assignment, nodes), where the former is the solution (an empty list if not found)
-    and the latter the number of nodes generated.
+    Returns a tuple (assignment, nodes), where the former is the solution (an empty list
+    if not found) and the latter the number of nodes generated.
     """
 
     def consistent_upto_level(cn, i, A):
         for j in range(0, i):
-            if not cn.consistent(i,j,A):
+            if not cn.consistent(i, j, A):
                 return j
         return i
 
     def GTB(cn, i, A):
-        #print(A)
+        # print(A)
         nonlocal num_nodes
         num_nodes += 1
         if i >= cn.num_variables():
@@ -51,40 +53,33 @@ def solve( st, cn ):
             A.pop()
         return False
 
-
     def BT(cn, i, A):
-
-        # ********** YOU IMPLEMENT THIS **********
+        # TODO
 
         return False
 
-
     def BJ(cn, i, A):
-
-        # ********** YOU IMPLEMENT THIS **********
+        # TODO
 
         return (False, 0)
-
 
     def CBJ(cn, i, A, CS):
-
-        # ********** YOU IMPLEMENT THIS **********
+        # TODO
 
         return (False, 0)
-
 
     num_nodes = 0
     assignment = []
     ConflictSet = [set() for _ in range(0, cn.num_variables())]
 
-    print( 'Solving ...', st)
+    print('Solving ...', st)
     if st == SolverType.GTBT:
-        solved  = GTB( cn, 0, assignment)
+        solved = GTB(cn, 0, assignment)
     elif st == SolverType.BT:
-        solved  = BT( cn, 0, assignment)
+        solved = BT(cn, 0, assignment)
     elif st == SolverType.BJ:
-        (solved,_) = BJ(cn, 0, assignment)
+        (solved, _) = BJ(cn, 0, assignment)
     elif st == SolverType.CBJ:
-        (solved,_) = CBJ(cn, 0, assignment, ConflictSet)
+        (solved, _) = CBJ(cn, 0, assignment, ConflictSet)
 
     return (assignment, num_nodes)
