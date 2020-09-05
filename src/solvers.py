@@ -54,8 +54,19 @@ def solve(st, cn):
         return False
 
     def BT(cn, i, A):
-        # TODO
-
+        nonlocal num_nodes
+        num_nodes += 1
+        for v in cn.get_domain(i):
+            A.append(v)
+            if not cn.consistent_other(i, A):
+                A.pop()
+                continue
+            if i == cn.num_variables():
+                return True
+            solved = BT(cn, i+1, A)
+            if solved:
+                return True
+            A.pop()
         return False
 
     def BJ(cn, i, A):
