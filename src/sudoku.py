@@ -6,6 +6,7 @@
 
 import sys
 from pathlib import Path
+from itertools import chain
 
 
 def read_puzzles(name):
@@ -111,58 +112,53 @@ def generate_constraints():
     63 64 65 66 67 68 69 70 71
     72 73 74 75 76 77 78 79 80
     """
-    lis = collect_rows()
-    collect_columns(lis)
-    collect_boxes(lis)
-    return lis
+    return list(chain(collect_rows(), collect_columns(), collect_boxes()))
 
 
 def collect_rows():
     """Collect all elements along with any element to its right.
     """
-    return [(x, y) for x in range(81) for y in range(x + 1, 9 + (x//9)*9)]
+    return ((x, y) for x in range(80) for y in range(x + 1, 9 + (x//9)*9))
 
 
-def collect_columns(lis):
+def collect_columns():
     """Collect all elements along with any element below it.
     """
-    for x in range(72):
-        for y in range(x + 9, 81, 9):
-            lis.append((x, y))
+    return ((x, y) for x in range(72) for y in range(x + 9, 81, 9))
 
 
-def collect_boxes(lis):
+def collect_boxes():
     """Collect all elements along with any elements sharing a box to its right
     or below (or both).
     """
-    for x in range(81):
+    for x in range(72):
         r, c = x // 9 % 3, x % 3
         if r == 0:
             if c == 0:
-                lis.append((x, x + 10))
-                lis.append((x, x + 11))
-                lis.append((x, x + 19))
-                lis.append((x, x + 20))
+                yield x, x + 10
+                yield x, x + 11
+                yield x, x + 19
+                yield x, x + 20
             elif c == 1:
-                lis.append((x, x + 8))
-                lis.append((x, x + 10))
-                lis.append((x, x + 17))
-                lis.append((x, x + 19))
+                yield x, x + 8
+                yield x, x + 10
+                yield x, x + 17
+                yield x, x + 19
             else:
-                lis.append((x, x + 7))
-                lis.append((x, x + 8))
-                lis.append((x, x + 16))
-                lis.append((x, x + 17))
+                yield x, x + 7
+                yield x, x + 8
+                yield x, x + 16
+                yield x, x + 17
         elif r == 1:
             if c == 0:
-                lis.append((x, x + 10))
-                lis.append((x, x + 11))
+                yield x, x + 10
+                yield x, x + 11
             elif c == 1:
-                lis.append((x, x + 8))
-                lis.append((x, x + 10))
+                yield x, x + 8
+                yield x, x + 10
             else:
-                lis.append((x, x + 8))
-                lis.append((x, x + 7))
+                yield x, x + 8
+                yield x, x + 7
 
 
 def main():

@@ -57,11 +57,12 @@ def solve(st, cn):
         nonlocal num_nodes
         num_nodes += 1
         for v in cn.get_domain(i):
+            # print(f"{i} : {v}{'*' if len(cn.get_domain(i))==1 else ''}")
             A.append(v)
             if not cn.consistent_other(i, A):
                 A.pop()
                 continue
-            if i == cn.num_variables():
+            if i == cn.num_variables() - 1:
                 return True
             solved = BT(cn, i+1, A)
             if solved:
@@ -92,5 +93,4 @@ def solve(st, cn):
         (solved, _) = BJ(cn, 0, assignment)
     elif st == SolverType.CBJ:
         (solved, _) = CBJ(cn, 0, assignment, ConflictSet)
-
     return (assignment, num_nodes)
