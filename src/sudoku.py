@@ -122,7 +122,9 @@ def collect_rows(lis):
             lis.append((x, y))
 
 def collect_columns(lis):
-    pass
+    for x in range(72):
+        for y in range(x + 9, 81, 9):
+            lis.append((x, y))
 
 def collect_boxes(lis):
     pass
