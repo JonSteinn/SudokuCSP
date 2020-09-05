@@ -134,3 +134,6 @@ dmypy.json
 
 # Mac
 __MACOSX/
+
+# Sandbox
+sandbox.py
