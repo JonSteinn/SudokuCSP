@@ -34,7 +34,7 @@
       ".editorconfig": true,
       "README.md": false,
       "requirements-dev.txt": true,
-      ".flake8": false,
-      ".pylintrc": false
+      ".flake8": true,
+      ".pylintrc": true
   }
 }

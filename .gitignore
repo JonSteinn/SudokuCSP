@@ -137,3 +137,7 @@ __MACOSX/
 
 # Sandbox
 sandbox.py
+
+
+# output
+src/output.txt
