@@ -1,0 +1,20 @@
+{
+  "files.exclude": {
+      ".vscode/": false,
+      "**/.git": true,
+      "**/.svn": true,
+      "**/.hg": true,
+      "**/CVS": true,
+      "**/.DS_Store": true,
+      ".pytest_cache/": true,
+      ".venv/": true,
+      ".mypy_cache": true,
+      "**.egg-info": true,
+      "**/__pycache__": true,
+      "dist/": true,
+      ".gitignore": true,
+      ".gitattribute": true,
+      ".editorconfig": true,
+      "README.md": true,
+  }
+}
