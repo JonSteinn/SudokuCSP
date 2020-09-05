@@ -161,6 +161,33 @@ def collect_boxes():
                 yield x, x + 7
 
 
+def puzzle_to_tikz(puzzle, tab='  ', caption='TODO', label='TODO'):
+    return ''.join([
+        '\\begin{center}\n',
+        f'{tab}\\begin{{figure}}[ht]\n',
+        f'{tab*2}\\centering\n',
+        f'{tab*2}\\def\\scale{{.75}} % scale everything\n',
+        (
+            f'{tab*2}\\begin{{tikzpicture}}[scale=\\scale, '
+            'every node/.style={scale=\\scale}]\n'
+        ),
+        '\n'.join(
+            (lambda v, y, x: (
+                f'{tab*3}\\node[anchor=center,scale=1.5] at'
+                f' ({x+.5}, {8.5-y}) {{${v}$}};'
+            ))(val, *divmod(i, 9)) for i, val in enumerate(puzzle) if val
+        ),
+        '\n'
+        f'{tab*3}\\draw[gray!50] (0,0) grid (9,9);\n',
+        f'{tab*3}\\draw[line width=0.55mm, scale=3] (0, 0) grid (3, 3);\n',
+        f'{tab*2}\\end{{tikzpicture}}\n',
+        f'{tab*2}\\caption{{{caption}}}\n',
+        f'{tab*2}\\label{{fig:{label}}}\n',
+        f'{tab}\\end{{figure}}\n',
+        '\\end{center}',
+    ])
+
+
 def main():
     """
     'soduko.txt' is the default expected input file name, but it can be overwritten by
@@ -183,6 +210,9 @@ def main():
     print('Processing puzzles from file', input_puzzle_file)
     puzzles = read_puzzles(input_puzzle_file)
     print('Read in', len(puzzles), 'Sudoku puzzle instances.')
+
+    print(puzzle_to_tikz(puzzles[1]))
+    exit(0)
 
     print('Generating and writing domains to file', output_domains_file)
     domains = generate_domains(puzzles)
