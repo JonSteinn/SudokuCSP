@@ -111,19 +111,16 @@ def generate_constraints():
     63 64 65 66 67 68 69 70 71
     72 73 74 75 76 77 78 79 80
     """
-    lis = []
-    collect_rows(lis)
+    lis = collect_rows()
     collect_columns(lis)
     collect_boxes(lis)
     return lis
 
 
-def collect_rows(lis):
+def collect_rows():
     """Collect all elements along with any element to its right.
     """
-    for x in range(81):
-        for y in range(x + 1, 9 + (x//9)*9):
-            lis.append((x, y))
+    return [(x, y) for x in range(81) for y in range(x + 1, 9 + (x//9)*9)]
 
 
 def collect_columns(lis):
@@ -139,33 +136,33 @@ def collect_boxes(lis):
     or below (or both).
     """
     for x in range(81):
-        if (x // 9) % 3 == 2:
-            continue
-
-        if (x // 9) % 3 == 0:
-            if x % 3 == 0:
-                # (0,0)
+        r, c = x // 9 % 3, x % 3
+        if r == 0:
+            if c == 0:
                 lis.append((x, x + 10))
+                lis.append((x, x + 11))
+                lis.append((x, x + 19))
                 lis.append((x, x + 20))
-            elif x % 3 == 1:
-                # (1,0)
+            elif c == 1:
                 lis.append((x, x + 8))
                 lis.append((x, x + 10))
+                lis.append((x, x + 17))
+                lis.append((x, x + 19))
             else:
-                # (2,0)
+                lis.append((x, x + 7))
                 lis.append((x, x + 8))
                 lis.append((x, x + 16))
-        else:
-            if x % 3 == 0:
-                # (0,1)
+                lis.append((x, x + 17))
+        elif r == 1:
+            if c == 0:
                 lis.append((x, x + 10))
-            elif x % 3 == 1:
-                # (1,1)
+                lis.append((x, x + 11))
+            elif c == 1:
                 lis.append((x, x + 8))
                 lis.append((x, x + 10))
             else:
-                # (2,1)
                 lis.append((x, x + 8))
+                lis.append((x, x + 7))
 
 
 def main():
@@ -190,9 +187,6 @@ def main():
     print('Processing puzzles from file', input_puzzle_file)
     puzzles = read_puzzles(input_puzzle_file)
     print('Read in', len(puzzles), 'Sudoku puzzle instances.')
-
-    print(puzzles)
-    return
 
     print('Generating and writing domains to file', output_domains_file)
     domains = generate_domains(puzzles)
