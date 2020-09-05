@@ -1,4 +1,11 @@
 {
+  "python.testing.pytestArgs": [
+    "tests"
+  ],
+  "python.testing.unittestEnabled": false,
+  "python.testing.nosetestsEnabled": false,
+  "python.testing.pytestEnabled": true,
+
   "files.exclude": {
       ".vscode/": false,
       "**/.git": true,
@@ -15,6 +22,7 @@
       ".gitignore": true,
       ".gitattribute": true,
       ".editorconfig": true,
-      "README.md": true,
+      "README.md": false,
+      "requirements-dev.txt": true
   }
 }

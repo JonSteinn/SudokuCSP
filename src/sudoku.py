@@ -103,24 +103,28 @@ def generate_constraints():
 #     Reads Sudoku puzzle-instances from a file and outputs 'SimpleCSP' compatible constraints- and domains files,
 #     called 'filename_cst.txt' and 'filename_dom.txt', respectively.
 #
+def main():
+    name = 'sudoku'
+    input_puzzle_file = name + '.txt' # 'soduko.txt' is the default expected input file name, but it can be overwritten
+    if len(sys.argv) == 2:            # by specifying an alternative name as a command-line argument.
+        input_puzzle_file = sys.argv[1]
+        name = Path(input_puzzle_file).stem
+        assert len(name) > 0
+    output_domains_file = name + "_dom.txt"
+    output_constraints_file = name + "_cst.txt"
 
-name = 'sudoku'
-input_puzzle_file = name + '.txt' # 'soduko.txt' is the default expected input file name, but it can be overwritten
-if len(sys.argv) == 2:            # by specifying an alternative name as a command-line argument.
-    input_puzzle_file = sys.argv[1]
-    name = Path(input_puzzle_file).stem
-    assert len(name) > 0
-output_domains_file = name + "_dom.txt"
-output_constraints_file = name + "_cst.txt"
+    print('Processing puzzles from file', input_puzzle_file)
+    puzzles = read_puzzles(input_puzzle_file)
+    print('Read in', len(puzzles), 'Sudoku puzzle instances.')
+    exit(0) # TODO: REMOVE
+    print( 'Generating and writing domains to file', output_domains_file)
+    domains = generate_domains(puzzles)
+    write_puzzles_domains( name + "_dom.txt", domains)
 
-print('Processing puzzles from file', input_puzzle_file)
-puzzles = read_puzzles(input_puzzle_file)
-print('Read in', len(puzzles), 'Sudoku puzzle instances.')
+    print( 'Generating and writing constraints to file', output_constraints_file)
+    constraints = generate_constraints()                           # Generate and write out the constraints for Sudoku.
+    write_puzzle_constraints(output_constraints_file, constraints) # Note, the constraints are independent of the instances.
 
-print( 'Generating and writing domains to file', output_domains_file)
-domains = generate_domains(puzzles)
-write_puzzles_domains( name + "_dom.txt", domains)
 
-print( 'Generating and writing constraints to file', output_constraints_file)
-constraints = generate_constraints()                           # Generate and write out the constraints for Sudoku.
-write_puzzle_constraints(output_constraints_file, constraints) # Note, the constraints are independent of the instances.
+if __name__ == "__main__":
+    main()
