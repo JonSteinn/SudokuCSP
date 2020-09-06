@@ -9,10 +9,11 @@ from enum import Enum
 
 class SolverType(Enum):
     """Solver types enum"""
-    GTBT = 1        # Generate-and-test Backtracking
-    BT = 2          # Cronological Backtracking
-    BJ = 3          # Backjumping
-    CBJ = 4         # Conflict-Directed Backjumping
+
+    GTBT = 1  # Generate-and-test Backtracking
+    BT = 2  # Cronological Backtracking
+    BJ = 3  # Backjumping
+    CBJ = 4  # Conflict-Directed Backjumping
 
 
 def make_arc_consistent(cn):
@@ -47,7 +48,7 @@ def solve(st, cn):
             return cn.consistent_all(A)
         for v in cn.get_domain(i):
             A.append(v)
-            solved = GTB(cn, i+1, A)
+            solved = GTB(cn, i + 1, A)
             if solved:
                 return True
             A.pop()
@@ -57,34 +58,27 @@ def solve(st, cn):
         nonlocal num_nodes
         num_nodes += 1
         for v in cn.get_domain(i):
-            # print(f"{i} : {v}{'*' if len(cn.get_domain(i))==1 else ''}")
             A.append(v)
-            if not cn.consistent_other(i, A):
-                A.pop()
-                continue
-            if i == cn.num_variables() - 1:
-                return True
-            solved = BT(cn, i+1, A)
-            if solved:
+            if cn.consistent_other(i, A) and (
+                i == cn.num_variables() - 1 or BT(cn, i + 1, A)
+            ):
                 return True
             A.pop()
         return False
 
     def BJ(cn, i, A):
         # TODO
-
         return (False, 0)
 
     def CBJ(cn, i, A, CS):
         # TODO
-
         return (False, 0)
 
     num_nodes = 0
     assignment = []
     ConflictSet = [set() for _ in range(0, cn.num_variables())]
 
-    print('Solving ...', st)
+    print("Solving ...", st)
     if st == SolverType.GTBT:
         solved = GTB(cn, 0, assignment)
     elif st == SolverType.BT:

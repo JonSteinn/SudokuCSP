@@ -112,7 +112,7 @@ def generate_constraints():
     63 64 65 66 67 68 69 70 71
     72 73 74 75 76 77 78 79 80
     """
-    return list(chain(collect_rows(), collect_columns(), collect_boxes()))
+    return list(chain(collect_rows(), collect_columns(), collect_blocks()))
 
 
 def collect_rows():
@@ -127,7 +127,7 @@ def collect_columns():
     return ((x, y) for x in range(72) for y in range(x + 9, 81, 9))
 
 
-def collect_boxes():
+def collect_blocks():
     """Collect all elements along with any elements sharing a box to its right
     or below (or both).
     """
@@ -162,30 +162,32 @@ def collect_boxes():
 
 
 def puzzle_to_tikz(puzzle, tab='  ', caption='TODO', label='TODO'):
-    return ''.join([
-        '\\begin{center}\n',
-        f'{tab}\\begin{{figure}}[ht]\n',
-        f'{tab*2}\\centering\n',
-        f'{tab*2}\\def\\scale{{.75}} % scale everything\n',
+    """Create a tikz drawing of a puzzle"""
+    return ''.join(
         (
-            f'{tab*2}\\begin{{tikzpicture}}[scale=\\scale, '
-            'every node/.style={scale=\\scale}]\n'
-        ),
-        '\n'.join(
-            (lambda v, y, x: (
-                f'{tab*3}\\node[anchor=center,scale=1.5] at'
-                f' ({x+.5}, {8.5-y}) {{${v}$}};'
-            ))(val, *divmod(i, 9)) for i, val in enumerate(puzzle) if val
-        ),
-        '\n'
-        f'{tab*3}\\draw[gray!50] (0,0) grid (9,9);\n',
-        f'{tab*3}\\draw[line width=0.55mm, scale=3] (0, 0) grid (3, 3);\n',
-        f'{tab*2}\\end{{tikzpicture}}\n',
-        f'{tab*2}\\caption{{{caption}}}\n',
-        f'{tab*2}\\label{{fig:{label}}}\n',
-        f'{tab}\\end{{figure}}\n',
-        '\\end{center}',
-    ])
+            '\\begin{center}\n',
+            f'{tab}\\begin{{figure}}[ht]\n',
+            f'{tab*2}\\centering\n',
+            f'{tab*2}\\def\\scale{{.75}} % scale everything\n',
+            (
+                f'{tab*2}\\begin{{tikzpicture}}[scale=\\scale, '
+                'every node/.style={scale=\\scale}]\n'
+            ),
+            '\n'.join(
+                (lambda v, y, x: (
+                    f'{tab*3}\\node[anchor=center,scale=1.5] at'
+                    f' ({x+.5}, {8.5-y}) {{${v}$}};'
+                ))(val, *divmod(i, 9)) for i, val in enumerate(puzzle) if val
+            ),
+            f'\n{tab*3}\\draw[gray!50] (0,0) grid (9,9);\n',
+            f'{tab*3}\\draw[line width=0.55mm, scale=3] (0, 0) grid (3, 3);\n',
+            f'{tab*2}\\end{{tikzpicture}}\n',
+            f'{tab*2}\\caption{{{caption}}}\n',
+            f'{tab*2}\\label{{fig:{label}}}\n',
+            f'{tab}\\end{{figure}}\n',
+            '\\end{center}',
+        )
+    )
 
 
 def main():
