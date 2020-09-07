@@ -1,6 +1,6 @@
 from src.solvers import SolverType, solve, make_arc_consistent, revise
 from src.constraintnetwork import ConstraintNetwork
-from .utils import ALL_CONSTRAINTS, sudoku_csp_1, sudoku_csp_2
+from .utils import ALL_CONSTRAINTS, sudoku_csp_1, sudoku_csp_2, sudoku_csp_3
 
 
 def test_bt():
@@ -159,3 +159,48 @@ def test_arc_consistency():
     make_arc_consistent(csp)
     for i in range(81):
         assert len(csp.get_domain(i)) == 1
+
+
+x3 = '359168274418273569762549318591482736837651492246937851625314987184795623973826145'
+def test_correct_solution_BT():
+    expected = list(map(int, x3))
+    csp = sudoku_csp_3()
+    sol, _ = solve(SolverType.BT, csp)
+    assert sol == expected
+
+
+def test_correct_solution_BT_with_AC3():
+    expected = list(map(int, x3))
+    csp = sudoku_csp_3()
+    make_arc_consistent(csp)
+    sol, _ = solve(SolverType.BT, csp)
+    assert sol == expected
+
+
+def test_correct_solution_BJ():
+    expected = list(map(int, x3))
+    csp = sudoku_csp_3()
+    sol, _ = solve(SolverType.BJ, csp)
+    assert sol == expected
+
+
+def test_correct_solution_BJ_with_AC3():
+    expected = list(map(int, x3))
+    csp = sudoku_csp_3()
+    make_arc_consistent(csp)
+    sol, _ = solve(SolverType.BJ, csp)
+    assert sol == expected
+
+
+def test_correct_solution_CBJ():
+    expected = list(map(int, x3))
+    csp = sudoku_csp_3()
+    sol, _ = solve(SolverType.CBT, csp)
+    assert sol == expected
+
+def test_correct_solution_CBJ_with_AC3():
+    expected = list(map(int, x3))
+    csp = sudoku_csp_3()
+    make_arc_consistent(csp)
+    sol, _ = solve(SolverType.CBT, csp)
+    assert sol == expected
