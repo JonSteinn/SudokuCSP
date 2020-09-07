@@ -827,7 +827,7 @@ def gen_csp_from_str(s):
     return csp
 
 
-sudoku_csp_1 = gen_csp_from_str("""427568193
+sudoku_csp_1 = lambda: gen_csp_from_str("""427568193
 683197524
 915342867
 132685749
@@ -836,7 +836,7 @@ sudoku_csp_1 = gen_csp_from_str("""427568193
 349851276
 871926435
 256473981""")
-sudoku_csp_2 = gen_csp_from_str(""".6....91.
+sudoku_csp_2 = lambda: gen_csp_from_str(""".6....91.
 2.3.1568.
 ...6.3254
 .2...13..

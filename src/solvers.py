@@ -16,6 +16,19 @@ class SolverType(Enum):
     CBJ = 4  # Conflict-Directed Backjumping
 
 
+def revise(cn, i, j):
+    to_rem = set()
+    dom_i = cn.get_domain(i)
+    for val_i in dom_i:
+        dom_j = cn.get_domain(j)
+        if len(dom_j) == 1 and val_i in dom_j:
+            to_rem.add(val_i)
+    if to_rem:
+        dom_i -= to_rem
+        return True
+    return False
+
+
 def make_arc_consistent(cn):
     """
     Makes the cn constraint network arc-consistent (use the AC-3 algorithm).

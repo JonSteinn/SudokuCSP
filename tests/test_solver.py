@@ -1,4 +1,4 @@
-from src.solvers import SolverType, solve, make_arc_consistent
+from src.solvers import SolverType, solve, make_arc_consistent, revise
 from src.constraintnetwork import ConstraintNetwork
 from .utils import ALL_CONSTRAINTS, sudoku_csp_1, sudoku_csp_2, gen_csp_from_str
 
@@ -123,9 +123,32 @@ def test_bt():
     256473981
     """
 
+def test_revise():
+    csp = sudoku_csp_1()
+    assert revise(csp, 46, 45)
+    assert 7 not in csp.get_domain(46)
+    assert not revise(csp, 46, 45)
+    for j in csp.get_vars_in_contraint_with(46):
+        revise(csp, 46, j)
+    assert csp.get_domain(46) == {6}
+
+    csp = sudoku_csp_2()
+    for i in range(81):
+        if len(csp.get_domain(i)) > 1:
+            continue
+        for j in csp.get_vars_in_contraint_with(i):
+            assert not revise(csp, i, j)
+
+    for j in csp.get_vars_in_contraint_with(80):
+        revise(csp, 80, j)
+    assert csp.get_domain(80) == {3, 8}
+
+
+
+
 
 def test_arc_consistency():
-    for csp in [sudoku_csp_1, sudoku_csp_2]:
+    for csp in [sudoku_csp_1(), sudoku_csp_2()]:
         make_arc_consistent(csp)
         for i in range(csp.num_variables()):
             for a in csp.get_domain(i):
