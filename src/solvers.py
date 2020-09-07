@@ -74,9 +74,10 @@ def solve(st, cn):
         return i
 
     def GTB(cn, i, A):
-        # print(A)
+        # Node counter
         nonlocal num_nodes
         num_nodes += 1
+        # Algorithm starts here
         if i >= cn.num_variables():
             return cn.consistent_all(A)
         for v in cn.get_domain(i):
@@ -88,8 +89,10 @@ def solve(st, cn):
         return False
 
     def BT(cn, i, A):
+        # Node counter
         nonlocal num_nodes
         num_nodes += 1
+        # Algorithm starts here
         for v in cn.get_domain(i):
             A.append(v)
             if cn.consistent_other(i, A) and (
@@ -100,11 +103,32 @@ def solve(st, cn):
         return False
 
     def BJ(cn, i, A):
-        # TODO
-        return (False, 0)
+        # Node counter
+        nonlocal num_nodes
+        num_nodes += 1
+        # Algorithm starts here
+        return_depth = 0
+        for v in cn.get_domain(i):
+            A.append(v)
+            max_check_lvl = consistent_upto_level(cn, i, A)
+            if i == max_check_lvl:
+                if i == cn.num_variables() - 1:
+                    return True, 0
+                solved, max_check_lvl = BJ(cn, i + 1, A)
+                if solved:
+                    return True, 0
+                if max_check_lvl < i:
+                    A.pop()
+                    return False, max_check_lvl
+            return_depth = max(return_depth, max_check_lvl)
+            A.pop()
+        return False, return_depth
 
     def CBJ(cn, i, A, CS):
-        # TODO
+        # Node counter
+        nonlocal num_nodes
+        num_nodes += 1
+        # Algorithm starts here
         return (False, 0)
 
     num_nodes = 0
