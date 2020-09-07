@@ -36,7 +36,8 @@ def revise(cn, i, j):
 
 def init_constraint_queue(cn):
     """Instantiate a queue with all constraints, including symmetric duplicates
-    as the algorithm provided in the article does expect that.
+    as the algorithm provided in the article does not assume constraints
+    to be a symmetric relation.
     """
     # pylint: disable=consider-using-enumerate
     constraint_queue = deque(cn.get_constraints())
@@ -107,16 +108,16 @@ def solve(st, cn):
         nonlocal num_nodes
         num_nodes += 1
         # Algorithm starts here
-        return_depth = 0
+        return_depth = -1
         for v in cn.get_domain(i):
             A.append(v)
             max_check_lvl = consistent_upto_level(cn, i, A)
             if i == max_check_lvl:
                 if i == cn.num_variables() - 1:
-                    return True, 0
+                    return True, -1
                 solved, max_check_lvl = BJ(cn, i + 1, A)
                 if solved:
-                    return True, 0
+                    return True, -1
                 if max_check_lvl < i:
                     A.pop()
                     return False, max_check_lvl
@@ -129,7 +130,26 @@ def solve(st, cn):
         nonlocal num_nodes
         num_nodes += 1
         # Algorithm starts here
-        return (False, 0)
+        CS[i] = {-1}
+        for v in cn.get_domain(i):
+            A.append(v)
+            h = consistent_upto_level(cn, i, A)
+            if h < i:
+                CS[i].add(h)
+            else:
+                if i == cn.num_variables() - 1:
+                    CS[i].add(i - 1)
+                    return True, -1
+                solved, r_depth = CBJ(cn, i + 1, A, CS)
+                if solved:
+                    return True, -1
+                if r_depth < i:
+                    A.pop()
+                    return False, r_depth
+            r_depth = max(CS[i])
+            CS[r_depth] = CS[r_depth].union(CS[i].difference({r_depth}))
+            A.pop()
+        return False, r_depth
 
     num_nodes = 0
     assignment = []
