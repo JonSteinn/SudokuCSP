@@ -516,4 +516,3 @@ def test_generate_domains():
         ],
     ]
     assert generate_domains(inp) == expected
-
