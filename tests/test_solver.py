@@ -1,6 +1,6 @@
 from src.solvers import SolverType, solve, make_arc_consistent, revise
 from src.constraintnetwork import ConstraintNetwork
-from .utils import ALL_CONSTRAINTS, sudoku_csp_1, sudoku_csp_2, gen_csp_from_str
+from .utils import ALL_CONSTRAINTS, sudoku_csp_1, sudoku_csp_2
 
 
 def test_bt():
@@ -154,3 +154,8 @@ def test_arc_consistency():
                     dj = csp.get_domain(j)
                     assert len(dj) != 0
                     assert len(dj) > 1 or a not in dj
+    # AC3 should "solve" the easy one
+    csp = sudoku_csp_1()
+    make_arc_consistent(csp)
+    for i in range(81):
+        assert len(csp.get_domain(i)) == 1

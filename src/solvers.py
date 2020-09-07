@@ -21,11 +21,11 @@ def revise(cn, i, j):
     """Remove values in the domain of i if they
     don't allow variable j to take any value.
     """
-    # TODO: This is somewhat tailored for sudoku, ask if okay, otherwise generalize
     to_rem = set()
     dom_i = cn.get_domain(i)
     for val_i in dom_i:
         dom_j = cn.get_domain(j)
+        # TODO: This is somewhat tailored for sudoku, ask if okay, otherwise generalize
         if len(dom_j) == 1 and val_i in dom_j:
             to_rem.add(val_i)
     if to_rem:
@@ -56,7 +56,7 @@ def make_arc_consistent(cn):
         i, j = queue.popleft()
         if revise(cn, i, j):
             for h in cn.get_vars_in_contraint_with(i):
-                if h != j:
+                if h != j:  # TODO: not checking h != i is Sudoku specific, okay'
                     queue.append((h, i))
 
 
