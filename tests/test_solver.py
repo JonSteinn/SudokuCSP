@@ -123,6 +123,7 @@ def test_bt():
     256473981
     """
 
+
 def test_revise():
     csp = sudoku_csp_1()
     assert revise(csp, 46, 45)
@@ -142,9 +143,6 @@ def test_revise():
     for j in csp.get_vars_in_contraint_with(80):
         revise(csp, 80, j)
     assert csp.get_domain(80) == {3, 8}
-
-
-
 
 
 def test_arc_consistency():

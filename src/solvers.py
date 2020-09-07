@@ -5,6 +5,7 @@
 #
 
 from enum import Enum
+from collections import deque
 
 
 class SolverType(Enum):
@@ -17,6 +18,10 @@ class SolverType(Enum):
 
 
 def revise(cn, i, j):
+    """Remove values in the domain of i if they
+    don't allow variable j to take any value.
+    """
+    # TODO: This is somewhat tailored for sudoku, ask if okay, otherwise generalize
     to_rem = set()
     dom_i = cn.get_domain(i)
     for val_i in dom_i:
@@ -29,15 +34,30 @@ def revise(cn, i, j):
     return False
 
 
+def init_constraint_queue(cn):
+    """Instantiate a queue with all constraints, including symmetric duplicates
+    as the algorithm provided in the article does expect that.
+    """
+    # pylint: disable=consider-using-enumerate
+    constraint_queue = deque(cn.get_constraints())
+    for i in range(len(constraint_queue)):
+        i, j = constraint_queue[i]
+        constraint_queue.append((j, i))
+    return constraint_queue
+
+
 def make_arc_consistent(cn):
     """
     Makes the cn constraint network arc-consistent (use the AC-3 algorithm).
     (there are no unary-constraints so you can omit making it first node-consistent).
     """
-
-    # ********** YOU IMPLEMENT THIS **********
-
-    return
+    queue = init_constraint_queue(cn)
+    while queue:
+        i, j = queue.popleft()
+        if revise(cn, i, j):
+            for h in cn.get_vars_in_contraint_with(i):
+                if h != j:
+                    queue.append((h, i))
 
 
 def solve(st, cn):

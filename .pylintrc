@@ -7,7 +7,7 @@ init-hook="from pylint.config import find_pylintrc; import os, sys; sys.path.app
 disable=bad-continuation, 
         missing-module-docstring,
         fixme
-good-names=st,cn,A,CS,GBT,BT,BJ,CBJ,GTB,ConflictSet,v,i,j,n,k,x,y,f,r,c,_
+good-names=st,cn,A,CS,GBT,BT,BJ,CBJ,GTB,ConflictSet,v,i,j,n,k,x,y,h,f,r,c,_
 
 [SIMILARITIES]
 ignore-imports=yes
