@@ -213,9 +213,6 @@ def main():
     puzzles = read_puzzles(input_puzzle_file)
     print('Read in', len(puzzles), 'Sudoku puzzle instances.')
 
-    print(puzzle_to_tikz(puzzles[1]))
-    exit(0)
-
     print('Generating and writing domains to file', output_domains_file)
     domains = generate_domains(puzzles)
     write_puzzles_domains(name + "_dom.txt", domains)

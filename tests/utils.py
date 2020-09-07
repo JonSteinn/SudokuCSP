@@ -1,3 +1,6 @@
+from src.sudoku import generate_domains_single, generate_constraints
+from src.constraintnetwork import ConstraintNetwork
+
 ALL_CONSTRAINTS = {
     (35, 62),
     (30, 32),
@@ -810,3 +813,35 @@ ALL_CONSTRAINTS = {
     (55, 73),
     (4, 31),
 }
+
+
+def gen_csp_from_str(s):
+    board = list(map(int, s.replace('\n', '').replace('.', '0')))
+    doms = generate_domains_single(board)
+    constraints = generate_constraints()
+    csp = ConstraintNetwork(len(board))
+    for c_1, c_2 in constraints:
+        csp.add_ne_constraint(c_1, c_2)
+    for i, dom in enumerate(doms):
+        csp.set_domain(i, dom)
+    return csp
+
+
+sudoku_csp_1 = gen_csp_from_str("""427568193
+683197524
+915342867
+132685749
+598734612
+7..2..35.
+349851276
+871926435
+256473981""")
+sudoku_csp_2 = gen_csp_from_str(""".6....91.
+2.3.1568.
+...6.3254
+.2...13..
+15..4...6
+...2..89.
+..6..2.79
+4.7.9..62
+9127..5..""")
