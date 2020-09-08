@@ -815,6 +815,65 @@ ALL_CONSTRAINTS = {
     (4, 31),
 }
 
+ALL_CONSTRAINTS_4X4 = [
+    (0, 1),
+    (0, 2),
+    (0, 3),
+    (0, 4),
+    (0, 5),
+    (0, 8),
+    (0, 12),
+    (1, 2),
+    (1, 3),
+    (1, 4),
+    (1, 5),
+    (1, 9),
+    (1, 13),
+    (2, 3),
+    (2, 6),
+    (2, 7),
+    (2, 10),
+    (2, 14),
+    (3, 6),
+    (3, 7),
+    (3, 11),
+    (3, 15),
+    (4, 5),
+    (4, 6),
+    (4, 7),
+    (4, 8),
+    (4, 12),
+    (5, 6),
+    (5, 7),
+    (5, 9),
+    (5, 13),
+    (6, 7),
+    (6, 10),
+    (6, 14),
+    (7, 11),
+    (7, 15),
+    (8, 9),
+    (8, 10),
+    (8, 11),
+    (8, 12),
+    (8, 13),
+    (9, 10),
+    (9, 11),
+    (9, 12),
+    (9, 13),
+    (10, 11),
+    (10, 14),
+    (10, 15),
+    (11, 14),
+    (11, 15),
+    (12, 13),
+    (12, 14),
+    (12, 15),
+    (13, 14),
+    (13, 15),
+    (14, 15),
+]
+
 
 def gen_csp_from_board(board):
     assert len(board) == 81
@@ -831,6 +890,7 @@ def gen_csp_from_board(board):
 def gen_csp_from_str(s):
     board = list(map(int, s.replace("\n", "").replace(".", "0")))
     return gen_csp_from_board(board)
+
 
 sudoku_csp_1 = lambda: gen_csp_from_str(
     """427568193
@@ -878,14 +938,15 @@ sudoku_csp_4 = lambda: gen_csp_from_str(
 ......8.."""
 )
 
+
 def get_all_from_file(fname, puzzle_path):
     with open(puzzle_path.joinpath(fname).as_posix()) as f:
         puzzles = []
         puzzle = []
         for line in f.readlines():
             line = line.strip()
-            if line and (line[0] == '.' or line[0].isnumeric()):
-                line = line.replace('.', '0').replace(',', '')
+            if line and (line[0] == "." or line[0].isnumeric()):
+                line = line.replace(".", "0").replace(",", "")
                 puzzle.extend(map(int, line))
             if len(puzzle) == 81:
                 puzzles.append(puzzle)
@@ -894,8 +955,8 @@ def get_all_from_file(fname, puzzle_path):
 
 
 def get_all_puzzles():
-    puzzle_path = pathlib.Path(__file__).parent.parent.joinpath('src', 'puzzles')
-    all_puzz = get_all_from_file('sudoku_easy.txt', puzzle_path)
-    all_puzz.extend(get_all_from_file('sudoku_hard.txt', puzzle_path))
-    all_puzz.extend(get_all_from_file('custom.txt', puzzle_path))
+    puzzle_path = pathlib.Path(__file__).parent.parent.joinpath("src", "puzzles")
+    all_puzz = get_all_from_file("sudoku_easy.txt", puzzle_path)
+    all_puzz.extend(get_all_from_file("sudoku_hard.txt", puzzle_path))
+    all_puzz.extend(get_all_from_file("custom.txt", puzzle_path))
     return list(map(gen_csp_from_board, all_puzz))

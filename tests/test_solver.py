@@ -6,7 +6,7 @@ from .utils import (
     sudoku_csp_2,
     sudoku_csp_3,
     sudoku_csp_4,
-    get_all_puzzles
+    get_all_puzzles,
 )
 
 
@@ -216,5 +216,3 @@ def test_correct_solution_CBJ_with_AC3():
     make_arc_consistent(csp)
     sol, _ = solve(SolverType.CBJ, csp)
     assert sol == expected
-
-

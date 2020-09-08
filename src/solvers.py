@@ -138,7 +138,6 @@ def solve(st, cn):
                 CS[i].add(h)
             else:
                 if i == cn.num_variables() - 1:
-                    CS[i].add(i - 1)
                     return True, -1
                 solved, r_depth = CBJ(cn, i + 1, A, CS)
                 if solved:
