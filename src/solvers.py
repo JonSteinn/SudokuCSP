@@ -108,6 +108,11 @@ def solve(st, cn):
         nonlocal num_nodes
         num_nodes += 1
         # Algorithm starts here
+        print(i)
+        print(i)
+        if i == 13:
+            print('yo')
+            print(cn.get_domain)
         return_depth = -1
         for v in cn.get_domain(i):
             A.append(v)

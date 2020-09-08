@@ -960,3 +960,16 @@ def get_all_puzzles():
     all_puzz.extend(get_all_from_file("sudoku_hard.txt", puzzle_path))
     all_puzz.extend(get_all_from_file("custom.txt", puzzle_path))
     return list(map(gen_csp_from_board, all_puzz))
+
+
+def sud_4x4_to_domains(board):
+    return [{x} if x else {1, 2, 3, 4} for x in board]
+
+
+def csp_from_4x4_str(string):
+    csp = ConstraintNetwork(16)
+    for i, d in enumerate(sud_4x4_to_domains(map(int, string))):
+        csp.set_domain(i, d)
+    for i, j in ALL_CONSTRAINTS_4X4:
+        csp.add_ne_constraint(i, j)
+    return csp

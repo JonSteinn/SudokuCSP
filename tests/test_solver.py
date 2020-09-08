@@ -7,10 +7,11 @@ from .utils import (
     sudoku_csp_3,
     sudoku_csp_4,
     get_all_puzzles,
+    csp_from_4x4_str
 )
 
 
-def test_bt():
+def test_node_count_BT():
     csp = ConstraintNetwork(81)
     for a, b in ALL_CONSTRAINTS:
         csp.add_ne_constraint(a, b)
@@ -128,6 +129,37 @@ def test_bt():
     349851276
     871926435
     256473981
+    """
+
+    assert solve(SolverType.BT, csp_from_4x4_str("0320200000010140"))[1] == 26
+    # Backtracking done by hand, expands 2+6+2 additional nodes to the 16
+    """
+    .32.
+    2...
+    ...1
+    .142
+    """
+
+def test_node_count_BJ():
+    # Backjumping should save us one node in this one
+    c = csp_from_4x4_str("3410020000200143")
+    _, bt_n = solve(SolverType.BT, c)
+    _, bj_n = solve(SolverType.BJ, c)
+    assert bt_n > bj_n
+    assert bt_n == 23
+    assert bj_n == 22
+    """
+    3410
+    .2..
+    ..2. <--- this 2
+    .143
+
+    The 'this 2' initially fails because we set the first cell in the row to 2
+    and in backtracking we jump back one and try different values there while
+    backjumping goes all the way to the first in the row. There are other backjumps
+    but 'by coincidence' there backtracking has exhausted their possiblities at the
+    same time so beside that one jump, they expand the same, that is BJ safes a
+    single expansion.
     """
 
 
