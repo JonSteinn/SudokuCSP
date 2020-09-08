@@ -85,12 +85,14 @@ def generate_domains(puzzles):
     return list(map(generate_domains_single, puzzles))
 
 
+_ALL = {1, 2, 3, 4, 5, 6, 7, 8, 9}
+
+
 def generate_domains_single(puzzle):
     """
     Return a domain for a single puzzle.
     """
-    # TODO: replace {1,...,9} with a variable if never modified outside of function
-    return [{x} if x else {1, 2, 3, 4, 5, 6, 7, 8, 9} for x in puzzle]
+    return [{x} if x else _ALL for x in puzzle]
 
 
 def generate_constraints():

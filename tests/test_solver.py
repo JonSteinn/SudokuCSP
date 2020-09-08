@@ -1,6 +1,13 @@
 from src.solvers import SolverType, solve, make_arc_consistent, revise
 from src.constraintnetwork import ConstraintNetwork
-from .utils import ALL_CONSTRAINTS, sudoku_csp_1, sudoku_csp_2, sudoku_csp_3
+from .utils import (
+    ALL_CONSTRAINTS,
+    sudoku_csp_1,
+    sudoku_csp_2,
+    sudoku_csp_3,
+    sudoku_csp_4,
+    get_all_puzzles
+)
 
 
 def test_bt():
@@ -146,7 +153,9 @@ def test_revise():
 
 
 def test_arc_consistency():
-    for csp in [sudoku_csp_1(), sudoku_csp_2()]:
+    all_puzz = get_all_puzzles()
+    all_puzz.extend([sudoku_csp_1(), sudoku_csp_2(), sudoku_csp_3(), sudoku_csp_4()])
+    for csp in all_puzz:
         make_arc_consistent(csp)
         for i in range(csp.num_variables()):
             for a in csp.get_domain(i):
@@ -207,3 +216,5 @@ def test_correct_solution_CBJ_with_AC3():
     make_arc_consistent(csp)
     sol, _ = solve(SolverType.CBJ, csp)
     assert sol == expected
+
+

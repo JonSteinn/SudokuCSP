@@ -1,5 +1,6 @@
 from src.sudoku import generate_domains_single, generate_constraints
 from src.constraintnetwork import ConstraintNetwork
+import pathlib
 
 ALL_CONSTRAINTS = {
     (35, 62),
@@ -815,8 +816,8 @@ ALL_CONSTRAINTS = {
 }
 
 
-def gen_csp_from_str(s):
-    board = list(map(int, s.replace("\n", "").replace(".", "0")))
+def gen_csp_from_board(board):
+    assert len(board) == 81
     doms = generate_domains_single(board)
     constraints = generate_constraints()
     csp = ConstraintNetwork(len(board))
@@ -826,6 +827,10 @@ def gen_csp_from_str(s):
         csp.set_domain(i, dom)
     return csp
 
+
+def gen_csp_from_str(s):
+    board = list(map(int, s.replace("\n", "").replace(".", "0")))
+    return gen_csp_from_board(board)
 
 sudoku_csp_1 = lambda: gen_csp_from_str(
     """427568193
@@ -860,3 +865,37 @@ sudoku_csp_3 = lambda: gen_csp_from_str(
 1.4.95.23
 ..382...5"""
 )
+
+sudoku_csp_4 = lambda: gen_csp_from_str(
+    """3...8....
+...7....5
+1........
+......36.
+..2..4...
+.7.......
+....6.13.
+.452.....
+......8.."""
+)
+
+def get_all_from_file(fname, puzzle_path):
+    with open(puzzle_path.joinpath(fname).as_posix()) as f:
+        puzzles = []
+        puzzle = []
+        for line in f.readlines():
+            line = line.strip()
+            if line and (line[0] == '.' or line[0].isnumeric()):
+                line = line.replace('.', '0').replace(',', '')
+                puzzle.extend(map(int, line))
+            if len(puzzle) == 81:
+                puzzles.append(puzzle)
+                puzzle = []
+    return puzzles
+
+
+def get_all_puzzles():
+    puzzle_path = pathlib.Path(__file__).parent.parent.joinpath('src', 'puzzles')
+    all_puzz = get_all_from_file('sudoku_easy.txt', puzzle_path)
+    all_puzz.extend(get_all_from_file('sudoku_hard.txt', puzzle_path))
+    all_puzz.extend(get_all_from_file('custom.txt', puzzle_path))
+    return list(map(gen_csp_from_board, all_puzz))
