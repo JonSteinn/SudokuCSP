@@ -1,4 +1,9 @@
-# Assigntment 1
+# A Sudoku solver 
+A Sudoku solver that can pre-process with AC-3 has the following variants:
+* Chronological Backtracking
+* Backjumping search
+* Conflict-directed Backjumping search
+This is an assignment in the course `Informed Search Methods in AI` at Reykjavík University.
 
 ## Install dev dependencies
 ```sh
