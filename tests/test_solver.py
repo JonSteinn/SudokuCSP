@@ -6,6 +6,7 @@ from .utils import (
     sudoku_csp_2,
     sudoku_csp_3,
     sudoku_csp_4,
+    sudoku_csp_5,
     get_all_puzzles,
     csp_from_4x4_str
 )
@@ -161,6 +162,16 @@ def test_node_count_BJ():
     same time so beside that one jump, they expand the same, that is BJ safes a
     single expansion.
     """
+
+def test_node_count_CBJ():
+    csp = sudoku_csp_5()
+    make_arc_consistent(csp)
+    _, n1 = solve(SolverType.BJ, csp)
+    _, n2 = solve(SolverType.CBJ, csp)
+    assert n2 < n1
+    assert n1 == 504
+    assert n2 == 496
+
 
 
 def test_revise():

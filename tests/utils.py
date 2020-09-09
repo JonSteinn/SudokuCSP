@@ -938,6 +938,17 @@ sudoku_csp_4 = lambda: gen_csp_from_str(
 ......8.."""
 )
 
+sudoku_csp_5 = lambda: gen_csp_from_str(
+    """.3..5..4.
+..8.1.5..
+46.....12
+.7.5.2.8.
+...6.3...
+.4.1.9.3.
+25.....98
+..1.2.6..
+.8..6..2.""")
+
 
 def get_all_from_file(fname, puzzle_path):
     with open(puzzle_path.joinpath(fname).as_posix()) as f:
