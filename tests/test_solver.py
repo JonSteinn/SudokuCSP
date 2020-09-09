@@ -166,9 +166,11 @@ def test_node_count_BJ():
 def test_node_count_CBJ():
     csp = sudoku_csp_5()
     make_arc_consistent(csp)
+    _, n0 = solve(SolverType.BT, csp)
     _, n1 = solve(SolverType.BJ, csp)
     _, n2 = solve(SolverType.CBJ, csp)
-    assert n2 < n1
+    assert n2 < n1 < n0
+    assert n0 == 520
     assert n1 == 504
     assert n2 == 496
 
