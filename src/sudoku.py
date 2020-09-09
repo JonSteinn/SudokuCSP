@@ -133,6 +133,19 @@ def collect_blocks():
     """Collect all elements along with any elements sharing a box to its right
     or below (or both).
     """
+
+    # Below are the position of (c,r) in a block.
+
+    #########################
+    # (0,0) # (1,0) # (2,0) #
+    #########################
+    #########################
+    # (0,1) # (1,1) # (2,1) #
+    #########################
+    #########################
+    # (0,2) # (1,2) # (2,2) #
+    #########################
+
     for x in range(72):
         r, c = x // 9 % 3, x % 3
         if r == 0:
