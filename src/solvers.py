@@ -57,7 +57,7 @@ def make_arc_consistent(cn):
         i, j = queue.popleft()
         if revise(cn, i, j):
             for h in cn.get_vars_in_contraint_with(i):
-                if h != j:  # TODO: not checking h != i is Sudoku specific, okay'
+                if h != j:  # TODO: not checking h != i is Sudoku specific, okay?'
                     queue.append((h, i))
 
 
@@ -108,11 +108,6 @@ def solve(st, cn):
         nonlocal num_nodes
         num_nodes += 1
         # Algorithm starts here
-        print(i)
-        print(i)
-        if i == 13:
-            print('yo')
-            print(cn.get_domain)
         return_depth = -1
         for v in cn.get_domain(i):
             A.append(v)
