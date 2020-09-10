@@ -280,6 +280,8 @@ def test_test_suites():
         else:
             n3 = n2 + 1
         assert n1 < n2 < n3
+        if i == 0:
+            assert (n1, n2, n3) == (1014, 1476, 10352)
 
 
 def test_test_suites_with_ac3():

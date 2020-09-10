@@ -214,21 +214,21 @@ def solve(st, cn):
                     A.pop()                # Remove current value
                     return False, r_depth  # return fail and 'jumping destination'
 
-            # At each iteration there are two possible ways to add to the current
-            # conflict set, either the lowest level of inconsistency caused by the
-            # current value assigned (much like done in backjumping) and then the
-            # recursion call can pass up values to this current node. We set r_depth
-            # to the deepest level among all levels in the conflict set.
-            r_depth = max(CS[i])
-
-            # Pass up causes of failures, disregarding the failure of the node we pass
-            # to. That is, we find the node we can jump to and copy all the elements
-            # of the current node's conflict set, except that node, to its conflict set.
-            # CS[r_d] = CS[r_d] \cup (CS[i] \setminus {r_d})
-            CS[r_depth] = CS[r_depth].union(CS[i].difference({r_depth}))
-
             # Remove current value
             A.pop()
+
+        # At each iteration there are two possible ways to add to the current
+        # conflict set, either the lowest level of inconsistency caused by the
+        # current value assigned (much like done in backjumping) and then the
+        # recursion call can pass up values to this current node. We set r_depth
+        # to the deepest level among all levels in the conflict set.
+        r_depth = max(CS[i])
+
+        # Pass up causes of failures, disregarding the failure of the node we pass
+        # to. That is, we find the node we can jump to and copy all the elements
+        # of the current node's conflict set, except that node, to its conflict set.
+        # CS[r_d] = CS[r_d] \cup (CS[i] \setminus {r_d})
+        CS[r_depth] = CS[r_depth].union(CS[i].difference({r_depth}))
 
         # If all values in D_i fail, return failure and the 'jumping distance'
         return False, r_depth
