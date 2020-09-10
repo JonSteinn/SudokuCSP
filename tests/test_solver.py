@@ -295,7 +295,9 @@ def test_test_suites_with_ac3():
         s3, n3 = solve(SolverType.CBJ, g3)
         if i == 11:
             assert n1 > n2 > n3
-            assert (n1, n2, n3) == (427, 353, 316)
+            assert n1 == 427 or n1 == 427+1
+            assert n2 == 353 or n2 == 353+1
+            assert n3 == 316 or n3 == 316+1
         else:
             assert n1 == n2 == n3 == 81
         s4 = fetch_sudoku_solution(sud)
