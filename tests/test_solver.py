@@ -8,7 +8,10 @@ from .utils import (
     sudoku_csp_4,
     sudoku_csp_5,
     get_all_puzzles,
-    csp_from_4x4_str
+    csp_from_4x4_str,
+    t_suites,
+    fetch_sudoku_solution,
+    gen_csp_from_board
 )
 
 
@@ -141,6 +144,7 @@ def test_node_count_BT():
     .142
     """
 
+
 def test_node_count_BJ():
     # Backjumping should save us one node in this one
     c = csp_from_4x4_str("3410020000200143")
@@ -163,6 +167,7 @@ def test_node_count_BJ():
     single expansion.
     """
 
+
 def test_node_count_CBJ():
     csp = sudoku_csp_5()
     make_arc_consistent(csp)
@@ -173,7 +178,6 @@ def test_node_count_CBJ():
     assert n0 == 520
     assert n1 == 504
     assert n2 == 496
-
 
 
 def test_revise():
@@ -261,3 +265,38 @@ def test_correct_solution_CBJ_with_AC3():
     make_arc_consistent(csp)
     sol, _ = solve(SolverType.CBJ, csp)
     assert sol == expected
+
+
+def test_test_suites():
+    for i, sud in enumerate(t_suites):
+        e = fetch_sudoku_solution(sud)
+        s, n1 = solve(SolverType.CBJ, gen_csp_from_board(list(map(int, sud))))
+        assert s == e
+        s, n2 = solve(SolverType.BJ, gen_csp_from_board(list(map(int, sud))))
+        assert s == e
+        if i < 8:
+            s, n3 = solve(SolverType.BT, gen_csp_from_board(list(map(int, sud))))
+            assert s == e
+        else:
+            n3 = n2 + 1
+        assert n1 < n2 < n3
+
+
+def test_test_suites_with_ac3():
+    for i, sud in enumerate(t_suites):
+        g1 = gen_csp_from_board(list(map(int, sud)))
+        g2 = gen_csp_from_board(list(map(int, sud)))
+        g3 = gen_csp_from_board(list(map(int, sud)))
+        make_arc_consistent(g1)
+        make_arc_consistent(g2)
+        make_arc_consistent(g3)
+        s1, n1 = solve(SolverType.BT, g1)
+        s2, n2 = solve(SolverType.BJ, g2)
+        s3, n3 = solve(SolverType.CBJ, g3)
+        if i == 11:
+            assert n1 > n2 > n3
+            assert (n1, n2, n3) == (427, 353, 316)
+        else:
+            assert n1 == n2 == n3 == 81
+        s4 = fetch_sudoku_solution(sud)
+        assert s1 == s2 == s3 == s4
