@@ -99,7 +99,7 @@ def solve(st, cn):
         num_nodes += 1
         if i >= cn.num_variables():
             return cn.consistent_all(A)
-        for v in cn.get_domain(i):
+        for v in cn.get_sorted_domain(i):
             A.append(v)
             solved = GTB(cn, i + 1, A)
             if solved:
@@ -113,7 +113,7 @@ def solve(st, cn):
         num_nodes += 1
 
         # Try all assignments of x_i in D_i
-        for v in cn.get_domain(i):
+        for v in cn.get_sorted_domain(i):
 
             # Assign current value
             A.append(v)
@@ -139,7 +139,7 @@ def solve(st, cn):
         return_depth = -1
 
         # Try all assignments of x_i in D_i
-        for v in cn.get_domain(i):
+        for v in cn.get_sorted_domain(i):
 
             # Assign current value
             A.append(v)
@@ -185,7 +185,7 @@ def solve(st, cn):
         CS[i] = {-1}
 
         # Try all assignments of x_i in D_i
-        for v in cn.get_domain(i):
+        for v in cn.get_sorted_domain(i):
 
             # Assign current value
             A.append(v)
