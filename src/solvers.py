@@ -6,6 +6,7 @@
 
 from enum import Enum
 from collections import deque
+from itertools import chain
 
 
 class SolverType(Enum):
@@ -29,6 +30,8 @@ def revise(cn, i, j):
         dom_j = cn.get_domain(j)
 
         # If D_j = {val_i}, they conflict and no need for D_i to contain val_i
+        # This only works for non-equal constraints but since our network is
+        # only made for them, that is fine.
         if len(dom_j) == 1 and val_i in dom_j:
             to_rem.add(val_i)
 
@@ -46,20 +49,14 @@ def init_constraint_queue(cn):
     as the algorithm provided in the article does not assume constraints
     to be a symmetric relation.
     """
-    # pylint: disable=consider-using-enumerate
-
-    # Convert constraints into a queue
-    constraint_queue = deque(cn.get_constraints())
-
-    # For all constraints at start
-    for i in range(len(constraint_queue)):
-
-        # Reverse it and re-add
-        i, j = constraint_queue[i]
-        constraint_queue.append((j, i))
-
-    # Return a queue with all constraints (a,b) and their symmetric duplicate (b,a)
-    return constraint_queue
+    # Convert constraints into a queue with all constraints (a, b)
+    # and for each such constraint we also add (b, a)
+    return deque(
+        chain(
+            cn.get_constraints(),
+            ((b, a) for a, b in cn.get_constraints())
+        )
+    )
 
 
 def make_arc_consistent(cn):
@@ -77,6 +74,7 @@ def make_arc_consistent(cn):
         if revise(cn, i, j):
 
             # We try again removing from all peers but j, against i.
+            # No need to check h != i as that is never the case in our network.
             for h in cn.get_vars_in_contraint_with(i):
                 if h != j:
                     queue.append((h, i))
@@ -88,6 +86,7 @@ def solve(st, cn):
     Returns a tuple (assignment, nodes), where the former is the solution (an empty list
     if not found) and the latter the number of nodes generated.
     """
+    # pylint: disable=too-many-statements, unused-variable
 
     def consistent_upto_level(cn, i, A):
         for j in range(0, i):
@@ -228,7 +227,8 @@ def solve(st, cn):
         # to. That is, we find the node we can jump to and copy all the elements
         # of the current node's conflict set, except that node, to its conflict set.
         # CS[r_d] = CS[r_d] \cup (CS[i] \setminus {r_d})
-        CS[r_depth] = CS[r_depth].union(CS[i].difference({r_depth}))
+        CS[r_depth].update(CS[i])
+        CS[r_depth].discard(r_depth)
 
         # If all values in D_i fail, return failure and the 'jumping distance'
         return False, r_depth
