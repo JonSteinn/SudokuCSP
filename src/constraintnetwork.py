@@ -48,10 +48,17 @@ class ConstraintNetwork:
 
     def get_domain(self, i):
         """
-        Returns the domain of variable i.
+        Returns the domain of variable i (returns the orginal set, so can me mutated).
         """
         assert 0 <= i < self.num_vars
         return self.domains[i]
+
+    def get_sorted_domain(self, i):
+        """
+        Returns a sorted *copy* of the domain of variable i as a list.
+        """
+        assert 0 <= i < self.num_vars
+        return sorted( self.get_domain(i) )
 
     def add_ne_constraint(self, i, j):
         """
