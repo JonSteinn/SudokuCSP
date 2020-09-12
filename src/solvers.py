@@ -22,18 +22,16 @@ def revise(cn, i, j):
     """Remove values in the domain of i if they
     don't allow variable j to take any value.
     """
-    to_rem = set()
     dom_i = cn.get_domain(i)
 
-    # Try all values in the domain of i
-    for val_i in dom_i:
-        dom_j = cn.get_domain(j)
-
-        # If D_j = {val_i}, they conflict and no need for D_i to contain val_i
-        # This only works for non-equal constraints but since our network is
-        # only made for them, that is fine.
-        if len(dom_j) == 1 and val_i in dom_j:
-            to_rem.add(val_i)
+    # All values in D_i such that no assignment of x_j is consistent
+    to_rem = {
+        val_i
+        for val_i in dom_i
+        if not any(
+            cn.consistent_values(i, j, val_i, val_j) for val_j in cn.get_domain(j)
+        )
+    }
 
     # If we found domain values to remove
     if to_rem:
