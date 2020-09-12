@@ -1,0 +1,49 @@
+The implementation of our algorithms can be found in \cite{bib:git}.
+
+\subsection{Preprocessing}
+We preprocess the CSP to reduce the domains by enforcing arc-consistency. We do that with AC-3 as shown in Algorithm \ref{alg:ac3} that utilises the helper shown in Algorithm \ref{alg:revise}.
+
+\begin{algorithm}
+\begin{algorithmic}[H]
+\input{algs/ac3}
+\end{algorithmic}
+\caption{AC-3}
+\label{alg:ac3}
+\end{algorithm}
+
+\begin{algorithm}
+\begin{algorithmic}[H]
+\input{algs/revise}
+\end{algorithmic}
+\caption{Revise}
+\label{alg:revise}
+\end{algorithm}
+
+Since we only store constraints as an ordered pair, one issue when translating the algorithm from \cite{bib:art} was that it expects both constraints $(a,b)$ and $(b,a)$ to be present in the queue at start, since it is not assuming constraints to be a symmetric relation. This is done with a helper function that is omitted in Algorithm \ref{alg:ac3}.
+
+\subsection{Searches}
+Our algorithms for chronological backtracking, backjumping search and conflict-directed backjumping search can be seen in Algorithm \ref{alg:bt}, Algorithm \ref{alg:bj} and Algorithm \ref{alg:cbj} respectively. Since our network is using zero-based indexing while \cite{bib:art} uses one-based, we must adjust our algorithms for that. We also add a return on success mechanism that disregards the jumping value. This was done because the algorithms in \cite{bib:art} are not returning (or in our case, updating a parameter that is passed by reference) the solution but rather just printing it when found.
+
+\begin{algorithm}
+\begin{algorithmic}[H]
+\input{algs/bt}
+\end{algorithmic}
+\caption{Chronological backtracking}
+\label{alg:bt}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\begin{algorithmic}[H]
+\input{algs/bj}
+\end{algorithmic}
+\caption{Backjumping search}
+\label{alg:bj}
+\end{algorithm}
+
+\begin{algorithm}
+\begin{algorithmic}[H]
+\input{algs/cbj}
+\end{algorithmic}
+\caption{Conflict-directed backjumping}
+\label{alg:cbj}
+\end{algorithm}

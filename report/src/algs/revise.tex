@@ -1,0 +1,9 @@
+\State \textbf{Input}: A constraint network with access to domain array $D$ and a consistency check $c$ and variable indices $i$ and $j$.\\
+\Function{revise}{$cn$, $i$, $j$}
+    \State $R \gets \cset{v \in D[i]}{\neg\exists w\in D[j] \text{ s.t. } c(i,j,v,w)}$
+    \If{$R \neq \emptyset$}
+        \State $D[i] \gets D[i] \setminus R$
+        \State \Return{True}
+    \EndIf
+    \State \Return{False}
+\EndFunction

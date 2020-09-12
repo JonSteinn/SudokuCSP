@@ -1,0 +1,14 @@
+
+    \begin{tikzpicture}[scale=\scale, every node/.style={scale=\scale}]
+        \fill[green!20] (2,5) rectangle (3,9);
+        \fill[green!20] (0,4) rectangle (2,6);
+        \fill[blue!20] (0,3) rectangle (3,4);
+        \fill[blue!20] (3,4) rectangle (9,5);
+        \fill[blue!20] (2,0) rectangle (3,3);
+        \fill[red!20] (2,4) rectangle (3,5);
+      \draw[gray!50] (0,0) grid (9,9);
+      \draw[line width=0.55mm, scale=3] (0, 0) grid (3, 3);
+      \foreach \x in {0,1,...,80} {
+            \draw ({0.5+Mod(\x,9)}, {8.5-int(\x/9)}) node {$x_{\x}$};
+      }
+    \end{tikzpicture}

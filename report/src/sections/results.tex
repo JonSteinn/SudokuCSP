@@ -1,0 +1,48 @@
+Our algorithms can be seen in appendix \ref{app:algs}. All our searches will suffer from the fixed expansion order. Suppose the domain for $x_{j}$ is the singleton set $\set{v}$, and we assign $v$ to $x_i$, a peer of $x_j$, with $i<j$. Then we do not check the constraint $(i,j)$ until at depth $j$ even though it is very clear that $x_i$ can not be assigned $v$. This is fixed with our preprocessing as $v$ would be removed from $D_i$. It can also be made better by clever back jumping.
+
+In Figure \ref{fig:exp1} we can see the Sudoku puzzles provided for benchmarking. The performance of our algorithms without and with arc-consistency can be seen in Table \ref{tab:exp1}, all of which produced a valid solution.
+
+\begin{center}
+    \begin{figure}[ht]
+      \centering
+      \def\scale{0.28}
+      \input{images/img-benchmark}
+      \caption{All puzzles in the provided test suite.}
+    \label{fig:exp1}
+    \end{figure}
+\end{center}
+
+\begin{center}
+  \begin{table}[H]
+    \centering
+    \input{tables/tab-benchmark}
+    \caption{Performance of all three algorithms on the test suites without and with arc-consistency.}
+    \label{tab:exp1}
+  \end{table}
+\end{center}
+
+It is of no surprise that the performance increases as we become smarter with backtracking. Backjumping is an improvement on backtracking and conflict-directed backjumping is an improvement on backjumping. The most surprising results is probably that sometimes runs with less nodes expanded can take longer. This could be due to luck (or lack thereof) when checking constraints. As we stated earlier, each cell has 20 peers and in one run we could find the conflicting ones early on average while late in another.
+
+Sudoku puzzles are often rated as easy or hard. These ratings do not necessarily translate to the algorithms we have implemented, i.e. an ``easy'' puzzle can be hard for a backtracking algorithm. In fact, puzzles can be designed to be hard for backtracking. The more assigned values the puzzle has, the easier - this most algorithms (and humans) can agree on. Another criteria for easiness is how many new assignments can be concluded by simple logic. That would however not make the problem any easier for backtracking algorithms, unless we preprocess the domains.
+
+\begin{center}
+  \begin{figure}[ht]
+    \centering
+    \def\scale{.35} % scale everything
+    \input{images/img-additional}
+    \caption{The additional Sudoku puzzles used for experiments with arc-consistency.}
+    \label{fig:exp3}
+  \end{figure}
+\end{center}
+
+When the test suites were run with arc-consistency, only one was not solved directly by it and that was test suite 11. It required 427, 353 and 316 nodes to be expanded for backtracking, backjumping and conflict-directed backjumping respectively and all 20 test suites were solved within $0.012$ seconds by all algorithms. With such a minuscule difference in performance, we needed different puzzles to compare the algorithms with arc-consistency. We chose 4 puzzles from the additional puzzles provided and ran the three algorithms for all of them. The puzzle we chose can be seen in Figure \ref{fig:exp3}. The performance of our algorithms can be seen in Table \ref{tab:exp3}. Like before, the algorithms that are built as improvements outperform their prototypes, as is expected.
+
+\begin{center}     
+  \begin{table}[ht]
+    \centering
+    \rowcolors{2}{white}{gray!25}
+    \input{tables/tab-additional}
+    \caption{Performance of all three algorithms on the additional puzzles with arc-consistency.}
+    \label{tab:exp3}
+  \end{table}
+\end{center}

@@ -1,0 +1,22 @@
+\State \textbf{Input}: A constraint network $cn$ with access to number of variables $n$, domain array $D$ and constraint check $c$ that checks to what variable the current one is consistent up to, the current variable $i$ and the current assignment $A$.\\
+\Function{BJ}{$cn$, $i$, $A$}
+    \State $r \gets -1$
+    \ForAll{$v \in D[i]$}
+        \State $A[i]\gets v$
+        \State $m\gets c(i)$\Comment{$c(i)$ returns $i$ if consistent}
+        \If {$m=i$}
+            \If {$i=n-1$}
+                \State \Return{True, $-1$} \Comment{jump value does not matter on success}
+            \EndIf
+            \State $(s,m)\gets BJ(cn, i+1, A)$
+            \If {$s$}
+                \State \Return{True, $-1$}
+            \EndIf
+            \If {$m < i$}
+                \State \Return{False, $m$}
+            \EndIf
+        \EndIf
+        \State $r \gets \max(r, m)$
+    \EndFor
+    \State\Return{False, $r$}
+\EndFunction

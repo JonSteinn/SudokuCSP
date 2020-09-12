@@ -1,0 +1,14 @@
+\State \textbf{Input}: A constraint network $cn$ that offers access to peers and constraints.\\
+\Function{make\_arc\_consistent}{$cn$}
+    \State $Q \gets \text{queue of all constraints}$\Comment{both $(a,b)$ and $(b,a)$ are included}
+    \While{$Q \text{ is not empty}$}
+        \State $(i,j) \gets \text{ deque}(Q)$
+        \If{revise$(cn$, $i$, $j)$}
+            \ForAll{$h\in\cset{x}{x \text{ and } i \text{ are peers}}$}
+                \If{$h\neq j$}
+                    \State \text{enque}$(Q, (h, i))$
+                \EndIf
+            \EndFor
+        \EndIf
+    \EndWhile\label{euclidendwhile}
+\EndFunction

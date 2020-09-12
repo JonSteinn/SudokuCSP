@@ -1,0 +1,25 @@
+\State \textbf{Input}: A constraint network $cn$ with access to number of variables $n$, domain array $D$ and constraint check $c$ that checks to what variable the current one is consistent up to, the current variable $i$, the current assignment $A$ and a conflict set $CS$.\\
+\Function{CBJ}{$cn$, $i$, $A$, $CS$}
+    \State $CS[i] \gets \set{-1}$
+    \ForAll{$v \in D[i]$}
+        \State $A[i]\gets v$
+        \State $h \gets c(i)$\Comment{$c(i)$ returns $i$ if consistent}
+        \If {$h<i$}
+            \State{$CS[i] \gets CS[i] \cup \set{h}$}
+        \Else
+            \If{$h=i$}
+                \State \Return{True, $-1$}\Comment{jump value does not matter on success}
+            \EndIf
+            \State {$(s,r) \gets CBJ(cn, i + 1, A, CS)$}
+            \If{$s$}
+                \State \Return{True, $-1$}
+            \EndIf
+            \If{$r<i$}
+                \State \Return{False, $r$}
+            \EndIf
+        \EndIf
+    \EndFor
+    \State {$r\gets\max(CS[i])$}
+    \State {$C[r]\gets CS[r] \cup \left(CS[i] \setminus \set{r}\right)$}
+    \State\Return{False, $r$}
+\EndFunction

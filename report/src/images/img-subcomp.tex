@@ -1,0 +1,18 @@
+
+    \begin{tikzpicture}[scale=\scale, every node/.style={scale=\scale}]
+      \draw[gray!50] (0,0) grid (9,9);
+      \draw[line width=0.55mm, scale=3] (0, 0) grid (3, 3);
+      \foreach \x in {0,1,...,8} {
+        \foreach \y in {0,1,...,8} {
+            \draw (\x+.5,8.5-\y) node {$(\x,\y)$};
+        }
+      }
+      \draw[line width=0.55mm, red] (8,0) rectangle (9,1);
+      \draw[line width=0.55mm, red] (6,3) rectangle (9,6);
+      \draw[line width=0.55mm, red] (0,7) rectangle (9,8);
+      \draw[line width=0.55mm, red] (2,0) rectangle (3,9);
+      \draw (9,.5) node[right] {a cell};
+      \draw (9,4.5) node[right] {a block};
+      \draw (9,7.5) node[right] {a row};
+      \draw (2.5,9) node[above] {a column};
+    \end{tikzpicture}

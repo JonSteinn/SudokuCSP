@@ -1,0 +1,10 @@
+\State \textbf{Input}: A constraint network $cn$ with access to number of variables $n$, domain array $D$ and constraint check $c$ against all variables that have been assigned, the current variable $i$ and the current assignment $A$.\\
+\Function{BT}{$cn$, $i$, $A$}
+    \ForAll{$v \in D[i]$}
+        \State $A[i]\gets v$
+        \If {$c(i) \wedge (i = n - 1 \vee \text{BT}(cn,i+1,A))$}\Comment{$c(i)$ returns true if consistent}
+            \State\Return{True}
+        \EndIf
+    \EndFor
+    \State\Return{False}
+\EndFunction
