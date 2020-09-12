@@ -5,6 +5,9 @@ A Sudoku solver that can pre-process with AC-3 has the following variants:
 * Conflict-directed Backjumping search
 This is an assignment in the course `Informed Search Methods in AI` at Reykjavík University.
 
+## Report
+A report about this project can be found [here](https://github.com/JonSteinn/SudokuCSP/raw/master/report/report.pdf).
+
 ## Install dev dependencies
 ```sh
 # unix
